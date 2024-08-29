@@ -34,6 +34,36 @@ class Tree
     node
   end
 
+  def delete(value, node = @root)
+    return nil if node.nil?
+
+    if value < node.data
+      node.left_child = delete(value, node.left_child)
+    elsif value > node.data
+      node.right_child = delete(value, node.right_child)
+    else
+      # Node with only one child or no child
+      if node.left_child.nil?
+        return node.right_child
+      elsif node.right_child.nil?
+        return node.left_child
+      end
+
+      # Node with two children: Get the inorder successor
+      min_larger_node = find_min(node.right_child)
+      node.data = min_larger_node.data
+      node.right_child = delete(min_larger_node.data, node.right_child)
+    end
+
+    node
+  end
+
+  def find_min(node)
+    current = node
+    current = current.left_child while current.left_child
+    current
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
