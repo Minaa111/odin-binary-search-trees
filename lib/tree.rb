@@ -1,7 +1,7 @@
 require_relative 'node'
 
 class Tree
-  attr_accessor :tree, :root
+  attr_accessor :root
 
   def initialize(array)
     @root = build_tree(array)
@@ -20,6 +20,18 @@ class Tree
     root.right_child = build_tree(sorted_unique_array[(mid + 1)..])
 
     root
+  end
+
+  def insert(value, node = @root)
+    return Node.new(value) if node.nil?
+
+    if value < node.data
+      node.left_child = insert(value, node.left_child)
+    else
+      node.right_child = insert(value, node.right_child)
+    end
+
+    node
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
