@@ -70,7 +70,7 @@ class Tree
     elsif value > node.data
       find(value, node.right_child)
     else
-      node.data
+      node
     end
   end
 
@@ -135,6 +135,15 @@ class Tree
     end
 
     result unless block_given?
+  end
+
+  def height(node)
+    return -1 if node.nil?
+
+    left_height = height(node.left_child)
+    right_height = height(node.right_child)
+
+    [left_height, right_height].max + 1
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
