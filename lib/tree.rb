@@ -157,6 +157,23 @@ class Tree
     right_depth
   end
 
+  def height_and_balanced(node)
+    return [0, true] if node.nil?
+
+    left_height, left_balanced = height_and_balanced(node.left_child)
+    right_height, right_balanced = height_and_balanced(node.right_child)
+
+    balanced = left_balanced && right_balanced && (left_height - right_height).abs <= 1
+    height = [left_height, right_height].max + 1
+
+    [height, balanced]
+  end
+
+  def balanced?(node = @root)
+    _, balanced = height_and_balanced(node)
+    balanced
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
